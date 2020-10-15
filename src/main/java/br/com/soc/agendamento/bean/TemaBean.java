@@ -1,4 +1,4 @@
-package br.com.soc.exames.bean;
+package br.com.soc.agendamento.bean;
 
 import java.io.Serializable;
 
@@ -10,7 +10,7 @@ import javax.inject.Named;
 public class TemaBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private String tema = "afterdark";
+	private String tema = "afternoon";
 
 	public String getTema() {
 		return tema;

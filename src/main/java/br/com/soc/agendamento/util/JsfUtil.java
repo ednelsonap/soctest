@@ -1,4 +1,4 @@
-package br.com.soc.exames.util;
+package br.com.soc.agendamento.util;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;

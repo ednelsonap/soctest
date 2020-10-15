@@ -8,7 +8,7 @@
 		
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 		
-		<class>br.com.soc.exames.model.Exame</class>
+		<class>br.com.soc.agendamento.model.Agendamento</class>
 
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver" />

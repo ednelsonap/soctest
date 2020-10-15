@@ -1,4 +1,4 @@
-package br.com.soc.exames.dao;
+package br.com.soc.agendamento.dao;
 
 import java.io.Serializable;
 import java.util.List;
