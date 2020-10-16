@@ -20,7 +20,9 @@ public class Agendamento implements Serializable{
 	private String nomePaciente;
 	private String nomeExame;
 	private Date dataExame;
+	private Date hora;
 	private String observacao;
+	
 	public String getNomePaciente() {
 		return nomePaciente;
 	}
@@ -34,6 +36,12 @@ public class Agendamento implements Serializable{
 		this.nomeExame = nomeExame;
 	}
 	
+	public Date getHora() {
+		return hora;
+	}
+	public void setHora(Date hora) {
+		this.hora = hora;
+	}
 	public Date getDataExame() {
 		return dataExame;
 	}

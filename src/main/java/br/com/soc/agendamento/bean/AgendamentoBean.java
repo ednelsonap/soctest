@@ -25,7 +25,7 @@ public class AgendamentoBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Agendamento agendamento = new Agendamento();
-
+	
 	@Inject
 	private AgendamentoDao agendamentoDao;
 
@@ -88,9 +88,9 @@ public class AgendamentoBean implements Serializable {
 	}
 	
 	public Date getDataMinima(){
-		Calendar currentDate = Calendar.getInstance();
-		currentDate.add(Calendar.DATE, +1);
-		return currentDate.getTime();
+		Calendar dataAtual = Calendar.getInstance();
+		dataAtual.add(Calendar.DATE, +1);
+		return dataAtual.getTime();
 	}
 	
 	@Transactional
