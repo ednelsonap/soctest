@@ -6,65 +6,64 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
-<!-- <ui:composition template="_template.xhtml"> -->
-<h:head>
-	<title>Agendamento</title>
-	<link rel="shortcut icon" type="image/x-icon"
-		href="#{resource['img/ps_favicon.ico']}" />
-</h:head>
-<h:body style="background-color:#F0FFF0;">
+<ui:composition template="_template.xhtml">
+	<ui:define name="titulo">
+		<title>Plantão</title>
+	</ui:define>
 
-	<!-- TABELA DE EXAMES AGENDADOS -->
+	<ui:define name="conteudo">
 
-<div>
-	
-	<h:form id="formTabelaExamesAgendados">
+		<!-- TABELA DE EXAMES AGENDADOS -->
 
-			<p:dataTable id="tabelaExamesAgendados" var="agendamento" value="#{agendamentoBean.agendamentos}" emptyMessage="Nenhum agendamento cadastrado">
-				
-				<f:facet name="header">
-					Exames Agendados
+		<h:form id="formTabelaExamesAgendados">
+			<div style="width: 70%;">
+				<p:dataTable id="tabelaExamesAgendados" var="agendamento"
+					value="#{agendamentoBean.agendamentos}"
+					emptyMessage="Nenhum agendamento cadastrado">
+
+					<f:facet name="header">
+					EXAMES AGENDADOS
 				</f:facet>
-				
-				<p:column headerText="Paciente">
-					<h:outputText value="#{agendamento.nomePaciente}" />
-				</p:column>
 
-				<p:column headerText="Exame">
-					<h:outputText value="#{agendamento.nomeExame}" />
-				</p:column>
+					<p:column headerText="Paciente">
+						<h:outputText value="#{agendamento.nomePaciente}" />
+					</p:column>
 
-				<p:column headerText="Data">
-					<h:outputText value="#{agendamento.dataExame}" >
-						<f:convertDateTime pattern="dd/MM/yyyy" />
-					</h:outputText>
-				</p:column>	
-				
-				<p:column headerText="Observação">
-					<h:outputText value="#{agendamento.observacao}" />
-				</p:column>	
-				
-				<p:column headerText="Ações" style="width: 150px;">
-					<p:panelGrid id="panelGridAcoes" columns="2"
-						style="float:right;padding-top: 5px;">
-						
-						<p:commandButton update="@form" process="@this" 
-							actionListener="#{agendamentoBean.remover(agendamento)}" 
-							icon="fa fa-fw fa-remove" />
-							
-						<p:commandButton update=":formAgendamento" icon="fa fa-fw fa-edit"
-							title="Alterar" ajax="false"
-							render=":formAgendamento:botaoAlterar">
-							<f:setPropertyActionListener value="#{agendamento}"
-								target="#{agendamentoBean.agendamento}" />		
-						</p:commandButton>
-							
-					</p:panelGrid>
-				</p:column>	
-								
-			</p:dataTable>
+					<p:column headerText="Exame">
+						<h:outputText value="#{agendamento.nomeExame}" />
+					</p:column>
 
-	</h:form>
-</div>
-</h:body>
+					<p:column headerText="Data">
+						<h:outputText value="#{agendamento.dataExame}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Observação">
+						<h:outputText value="#{agendamento.observacao}" />
+					</p:column>
+
+					<p:column headerText="Ações" style="width: 150px;">
+						<p:panelGrid id="panelGridAcoes" columns="2"
+							style="float:right;padding-top: 5px;">
+
+							<p:commandButton update="@form" process="@this"
+								actionListener="#{agendamentoBean.remover(agendamento)}"
+								icon="fa fa-fw fa-remove" />
+
+							<p:commandButton update=":formAgendamento"
+								icon="fa fa-fw fa-edit" title="Alterar" ajax="false"
+								render=":formAgendamento:botaoAlterar">
+								<f:setPropertyActionListener value="#{agendamento}"
+									target="#{agendamentoBean.agendamento}" />
+							</p:commandButton>
+
+						</p:panelGrid>
+					</p:column>
+
+				</p:dataTable>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
 </html>

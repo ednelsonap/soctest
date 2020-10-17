@@ -10,7 +10,7 @@ import javax.inject.Named;
 public class TemaBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private String tema = "afternoon";
+	private String tema = "start";
 
 	public String getTema() {
 		return tema;
