@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="_template.xhtml">
+	<ui:define name="titulo">
+		<title>Plantão</title>
+	</ui:define>
+
+	<ui:define name="conteudo">
+
+		<!-- TABELA DE EXAMES AGENDADOS -->
+
+		<div style="width: 70%;">
+			<h:form id="formTabelaExamesAgendados">
+
+				<p:dataTable id="tabelaExamesAgendados" var="agendamento"
+					value="#{agendamentoBean.agendamentos}"
+					emptyMessage="Nenhum agendamento cadastrado" paginator="true"
+					rows="10"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+					rowsPerPageTemplate="10,20,50,100" style="text-align:center;">
+
+					<f:facet name="header">
+					EXAMES AGENDADOS
+					</f:facet>
+
+					<p:column headerText="Paciente"
+						sortBy="#{agendamento.paciente.nome}">
+						<h:outputText value="#{agendamento.paciente.nome}" />
+					</p:column>
+
+					<p:column headerText="Exame" sortBy="#{agendamento.exame.nome}">
+						<h:outputText value="#{agendamento.exame.nome}" />
+					</p:column>
+
+					<p:column headerText="Data" style="width: 100px;">
+						<h:outputText value="#{agendamento.dataExame}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Hora" style="width: 100px;">
+						<h:outputText value="#{agendamento.dataExame}">
+							<f:convertDateTime pattern="HH:mm" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Observação">
+						<h:outputText value="#{agendamento.observacao}" />
+					</p:column>
+
+					<p:column headerText="Status" style="width: 100px;">
+						<h:outputText value="#{agendamento.status}" />
+					</p:column>
+
+					<p:column headerText="Ações" style="width: 220px;">
+						<p:panelGrid id="panelGridAcoes" columns="4">
+						
+							<p:commandButton update="formResultado:resultado"
+								oncomplete="PF('resultadoDialog').show()" title="Resultado"
+								icon="fa fa-file-text">
+								<f:setPropertyActionListener value="#{agendamento}"
+									target="#{agendamentoBean.agendamento}" />
+							</p:commandButton>
+
+							<p:commandButton update="formDadosPaciente:dadosPaciente"
+								oncomplete="PF('pacienteDialog').show()" title="Paciente"
+								icon="fa fa-user">
+								<f:setPropertyActionListener value="#{agendamento.paciente}"
+									target="#{agendamentoBean.agendamento.paciente}" />
+							</p:commandButton>
+
+							<p:commandButton update=":formAlteracaoAgendamento"
+								oncomplete="PF('alteracaoDialog').show()"
+								icon="fa fa-fw fa-edit" title="Alterar">
+								<f:setPropertyActionListener value="#{agendamento}"
+									target="#{agendamentoBean.agendamento}" />
+							</p:commandButton>
+
+							<p:commandButton update="@form" process="@this"
+								actionListener="#{agendamentoBean.remover(agendamento)}"
+								icon="fa fa-fw fa-remove" title="Remover" />
+							
+						</p:panelGrid>
+					</p:column>
+
+				</p:dataTable>
+
+			</h:form>
+		</div>
+
+		<!-- JANELA DADOS DO PACIENTE  -->
+
+		<h:form id="formDadosPaciente">
+			<p:dialog header="Dados do Paciente" widgetVar="pacienteDialog"
+				modal="true" showEffect="fade" hideEffect="fade" resizable="false"
+				height="auto" width="auto">
+				<div align="center">
+					<p:outputPanel id="dadosPaciente"
+						style="text-align:center; font-size:15px; horizontal-align:center;">
+						<p:panelGrid columns="2"
+							rendered="#{not empty agendamentoBean.agendamento.paciente}"
+							columnClasses="label,value"
+							style="text-align:center; horizontal-align:center;">
+							<f:facet name="header">
+
+							</f:facet>
+
+							<h:outputText value="Código" />
+							<h:outputText value="#{agendamentoBean.agendamento.paciente.id}" />
+
+							<h:outputText value="Nome" />
+							<h:outputText
+								value="#{agendamentoBean.agendamento.paciente.nome}" />
+
+							<h:outputText value="Data de Nascimento" />
+							<h:outputText
+								value="#{agendamentoBean.agendamento.paciente.dataNasc}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+
+							<h:outputText value="Sexo" />
+							<h:outputText
+								value="#{agendamentoBean.agendamento.paciente.sexo}" />
+
+							<h:outputText value="CPF" />
+							<h:outputText value="#{agendamentoBean.agendamento.paciente.cpf}" />
+
+						</p:panelGrid>
+					</p:outputPanel>
+				</div>
+			</p:dialog>
+		</h:form>
+
+		<!-- JANELA RESULTADO EXAME -->
+
+		<h:form id="formResultado">
+			<p:dialog header="Resultado do Exame" widgetVar="resultadoDialog"
+				modal="true" showEffect="fade" hideEffect="fade" resizable="false"
+				height="auto" width="auto">
+				<div align="center">
+					<p:editor id="resultado" widgetVar="resultadoWidget"
+						value="#{agendamentoBean.agendamento.resultado}" width="600" />
+
+					<h:panelGrid columns="2" style="margin-top: 10px">
+
+						<h:panelGrid columns="2">
+							<p:commandButton value="Salvar" icon="fa fa-fw fa-save"
+								action="#{agendamentoBean.salvarResultado}"
+								style="margin-right:20px;" process="formResultado" ajax="false"
+								update=":formTabelaExamesAgendados:tabelaExamesAgendados" />
+						</h:panelGrid>
+
+						<p:commandButton value="Limpar" type="button"
+							onclick="PF('resultadoWidget').clear();" icon="fa fa-fw fa-eraser" />
+					</h:panelGrid>
+				</div>
+			</p:dialog>
+		</h:form>
+
+		<!-- JANELA ALTERAÇÃO DO AGENDAMENTO -->
+
+		<h:form id="formAlteracaoAgendamento">
+			<p:dialog header="Agendamento" widgetVar="alteracaoDialog"
+				modal="true" showEffect="fade" hideEffect="fade" resizable="false"
+				height="auto" width="auto">
+
+				<div align="center">
+					<h:form id="formAgendamento">
+						<p:fieldset legend="Agendamento de Exames">
+							<p:panelGrid id="panelGridCadastro">
+								<h:panelGrid columns="2" style="width: 100%">
+									<p:outputLabel value="Paciente:" for="paciente" />
+									<p:selectOneMenu id="paciente"
+										value="#{agendamentoBean.agendamento.paciente}"
+										required="true" requiredMessage="Escolha um paciente"
+										filter="true" filterMatchMode="contains" style="width: 80%">
+										<f:selectItem itemLabel="Selecione" itemValue="" />
+										<f:selectItems value="#{agendamentoBean.pacientes}"
+											var="paciente" itemLabel="#{paciente.nome}"
+											itemValue="#{paciente}" />
+									</p:selectOneMenu>
+
+
+									<p:outputLabel value="Exame:" for="exame" />
+									<p:selectOneMenu id="exame"
+										value="#{agendamentoBean.agendamento.exame}" required="true"
+										requiredMessage="Escolha um exame" filter="true"
+										filterMatchMode="contains" style="width: 80%">
+										<f:selectItem itemLabel="Selecione" itemValue="" />
+										<f:selectItems value="#{agendamentoBean.exames}" var="exame"
+											itemLabel="#{exame.nome}" itemValue="#{exame}" />
+									</p:selectOneMenu>
+
+									<p:outputLabel value="Data:" for="data" />
+									<p:calendar id="data"
+										value="#{agendamentoBean.agendamento.dataExame}"
+										required="true" pattern="dd/MM/yyyy" mask="true" locale="pt"
+										requiredMessage="Digite a data do exame"
+										mindate="#{agendamentoBean.dataMinima}"
+										validatorMessage="A data deve ser maior que a atual"
+										readonlyInput="true" />
+
+									<p:outputLabel for="hora" value="Hora:" />
+									<p:calendar id="hora"
+										value="#{agendamentoBean.agendamento.hora}" mask="true"
+										locale="pt" timeOnly="true" pattern="HH:mm" required="true"
+										requiredMessage="Digite a hora do exame" showOn="button"
+										style="width: 100%" />
+
+									<p:outputLabel value="Observação:" for="observacao" />
+									<p:inputTextarea id="observacao"
+										value="#{agendamentoBean.agendamento.observacao}" rows="5"
+										cols="30" counter="display" maxlength="500"
+										counterTemplate="{0} caracteres restantes." autoResize="false"
+										style="width: 87%" />
+									<br />
+									<h:outputText id="display" />
+								</h:panelGrid>
+
+								<div align="center">
+									<h:panelGrid columns="2">
+										<p:commandButton value="Alterar" icon="fa fa-fw fa-save"
+											action="#{agendamentoBean.alterar}"
+											style="margin-right:20px;" process="formAgendamento"
+											ajax="false"
+											update=":formTabelaExamesAgendados:tabelaExamesAgendados" />
+									</h:panelGrid>
+								</div>
+							</p:panelGrid>
+						</p:fieldset>
+					</h:form>
+				</div>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

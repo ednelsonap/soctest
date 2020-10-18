@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="_template.xhtml">
+
+	<ui:define name="titulo">
+		<title>Paciente</title>
+	</ui:define>
+
+	<ui:define name="conteudo">
+
+		<!-- FORMULÁRIO DE CADASTRO DE PACIENTES -->
+
+		<div style="width: 35%;">
+
+			<h:form id="formPaciente">
+				<p:fieldset legend="Cadastro de Pacientes">
+					<p:panelGrid id="panelGridCadastro">
+						<h:panelGrid columns="2" style="width: 100%; margin-bottom:10px"
+							cellpadding="5">
+							<p:outputLabel value="Nome:" for="nome" />
+							<p:inputText id="nome" value="#{pacienteBean.paciente.nome}"
+								required="true" requiredMessage="Digite o nome do paciente"
+								validatorMessage="O nome do paciente não pode ser superior a 60 caracteres"
+								style="width: 100%">
+								<f:validateLength maximum="60" />
+							</p:inputText>
+
+							<p:outputLabel value="CPF:" for="cpf" />
+							<p:inputText id="cpf" value="#{pacienteBean.paciente.cpf}"
+								required="true" requiredMessage="Digite o CPF do paciente"
+								validatorMessage="O CPF do paciente não pode ser superior a 11 caracteres"
+								style="width: 100%">
+								<f:validateLength maximum="11" />
+							</p:inputText>
+
+							<p:outputLabel value="Data de Nascimento:" for="dataNasc" />
+							<p:calendar id="dataNasc"
+								value="#{pacienteBean.paciente.dataNasc}" required="true"
+								pattern="dd/MM/yyyy" mask="true" locale="pt"
+								requiredMessage="Digite a data de nascimento" />
+
+							<p:outputLabel value="Sexo:" for="sexo" />
+							<h:panelGrid columns="2">
+								<p:selectOneRadio id="sexo" required="true" requiredMessage="Escolha o sexo"
+									value="#{pacienteBean.paciente.sexo}" unselectable="true">
+									<f:selectItem itemLabel="M" itemValue="M" />
+									<f:selectItem itemLabel="F" itemValue="F" />
+								</p:selectOneRadio>
+							</h:panelGrid>
+						</h:panelGrid>
+						<div align="center">
+							<h:panelGrid columns="2">
+								<p:commandButton value="Salvar" icon="fa fa-fw fa-save"
+									action="#{pacienteBean.salvar}" style="margin-right:20px;"
+									process="formPaciente" ajax="false"
+									update=" :formTabelaPacientesCadastrados:tabelaPacientesCadastrados"
+									rendered="#{pacienteBean.exibirBotaoSalvar(paciente)}" />
+
+								<p:commandButton value="Alterar" id="botaoAlterar"
+									icon="fa fa-fw fa-edit" action="#{pacienteBean.alterar}"
+									style="margin-right:20px;" process="@form"
+									update="@form :formTabelaPacientesCadastrados:tabelaPacientesCadastrados"
+									rendered="#{pacienteBean.exibirBotaoAlterar(paciente)}" />
+
+								<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
+									action="#{pacienteBean.limpar}" immediate="true"
+									ajax="false" style="margin-right:20px;">
+									<p:resetInput target="panelGridCadastro" />
+								</p:commandButton>
+							</h:panelGrid>
+						</div>
+					</p:panelGrid>
+				</p:fieldset>
+			</h:form>
+		</div>
+			<!-- 	TABELA DE PACIENTES CADASTRADOS -->
+		<div style="width: 70%;">	
+			<h:form id="formTabelaPacientesCadastrados">
+			
+				<p:dataTable id="tabelaPacientesCadastrados" var="paciente"
+					value="#{pacienteBean.pacientes}"
+					emptyMessage="Nenhum paciente cadastrado" paginator="true"
+					rows="10"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+					rowsPerPageTemplate="10,20,50,100"
+					style="margin-bottom:20px; text-align:center; margin-top:20px">
+
+					<f:facet name="header">
+					PACIENTES CADASTRADOS
+				</f:facet>
+
+					<p:column headerText="Código" sortBy="#{paciente.id}">
+						<h:outputText value="#{paciente.id}" />
+					</p:column>
+
+					<p:column headerText="Paciente" sortBy="#{paciente.nome}" filterBy="#{paciente.nome}" filterMatchMode="contains">
+						<h:outputText value="#{paciente.nome}" />
+					</p:column>
+
+					<p:column headerText="Data de Nascimento">
+						<h:outputText value="#{paciente.dataNasc}" >
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="CPF">
+						<h:outputText value="#{paciente.cpf}" />
+					</p:column>
+
+					<p:column headerText="Sexo">
+						<h:outputText value="#{paciente.sexo}" />
+					</p:column>
+
+					<p:column headerText="Ações" style="width: 150px;">
+						<p:panelGrid id="panelGridAcoes" columns="2"
+							style="float:right;padding-top: 5px;">
+
+							<p:commandButton update="@form" process="@this"
+								actionListener="#{pacienteBean.remover(paciente)}"
+								icon="fa fa-fw fa-remove" />
+
+							<p:commandButton update=":formPaciente"
+								icon="fa fa-fw fa-edit" title="Alterar" ajax="false"
+								render=":formPaciente:botaoAlterar">
+								<f:setPropertyActionListener value="#{paciente}"
+									target="#{pacienteBean.paciente}" />
+							</p:commandButton>
+
+						</p:panelGrid>
+					</p:column>
+
+				</p:dataTable>
+			
+		</h:form>
+			
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

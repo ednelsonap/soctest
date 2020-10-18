@@ -3,11 +3,14 @@ package br.com.soc.agendamento.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Agendamento implements Serializable{
@@ -16,25 +19,18 @@ public class Agendamento implements Serializable{
 
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
-	@Column(unique=true)
-	private String nomePaciente;
-	private String nomeExame;
 	private Date dataExame;
 	private Date hora;
 	private String observacao;
+	private String status = "AGENDADO";
+	@Column(length=3000)
+	private String resultado;
 	
-	public String getNomePaciente() {
-		return nomePaciente;
-	}
-	public void setNomePaciente(String nomePaciente) {
-		this.nomePaciente = nomePaciente;
-	}
-	public String getNomeExame() {
-		return nomeExame;
-	}
-	public void setNomeExame(String nomeExame) {
-		this.nomeExame = nomeExame;
-	}
+	@ManyToOne(cascade=CascadeType.MERGE, fetch=FetchType.EAGER)
+	private Paciente paciente;
+	
+	@ManyToOne(cascade=CascadeType.MERGE, fetch=FetchType.EAGER)
+	private Exame exame;
 	
 	public Date getHora() {
 		return hora;
@@ -54,7 +50,32 @@ public class Agendamento implements Serializable{
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
 	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	public Integer getId() {
 		return id;
 	}
+	public Paciente getPaciente() {
+		return paciente;
+	}
+	public void setPaciente(Paciente paciente) {
+		this.paciente = paciente;
+	}
+	public Exame getExame() {
+		return exame;
+	}
+	public void setExame(Exame exame) {
+		this.exame = exame;
+	}
+	public String getResultado() {
+		return resultado;
+	}
+	public void setResultado(String resultado) {
+		this.resultado = resultado;
+	}
+	
 }

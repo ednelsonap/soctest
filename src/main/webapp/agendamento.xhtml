@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="_template.xhtml">
+
+	<ui:define name="titulo">
+		<title>Cadastro</title>
+	</ui:define>
+
+	<ui:define name="conteudo">
+
+		<!-- FORMULÁRIO DE CADASTRO DOS EXAMES -->
+
+		<div style="width: 35%;">
+
+			<h:form id="formAgendamento">
+				<p:fieldset legend="Agendamento de Exames">
+					<p:panelGrid id="panelGridCadastro" >
+						<h:panelGrid columns="2" style="width: 100%">
+							<p:outputLabel value="Paciente:" for="paciente" />
+							<p:selectOneMenu id="paciente"
+								value="#{agendamentoBean.agendamento.paciente}" required="true"
+								requiredMessage="Escolha um paciente" filter="true"
+								filterMatchMode="contains" style="width: 80%">
+								<f:selectItem itemLabel="Selecione" itemValue="" />
+								<f:selectItems value="#{agendamentoBean.pacientes}"
+									var="paciente" itemLabel="#{paciente.nome}"
+									itemValue="#{paciente}" />
+							</p:selectOneMenu>
+
+
+							<p:outputLabel value="Exame:" for="exame" />
+							<p:selectOneMenu id="exame"
+								value="#{agendamentoBean.agendamento.exame}" required="true"
+								requiredMessage="Escolha um exame" filter="true"
+								filterMatchMode="contains" style="width: 80%">
+								<f:selectItem itemLabel="Selecione" itemValue="" />
+								<f:selectItems value="#{agendamentoBean.exames}" var="exame"
+									itemLabel="#{exame.nome}" itemValue="#{exame}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Data:" for="data" />
+							<p:calendar id="data"
+								value="#{agendamentoBean.agendamento.dataExame}" required="true"
+								pattern="dd/MM/yyyy" mask="true" locale="pt"
+								requiredMessage="Digite a data do exame"
+								mindate="#{agendamentoBean.dataMinima}"
+								validatorMessage="A data deve ser maior que a atual"
+								readonlyInput="true" />
+
+							<p:outputLabel for="hora" value="Hora:" />
+							<p:calendar id="hora" value="#{agendamentoBean.agendamento.hora}"
+								mask="true" locale="pt" timeOnly="true" pattern="HH:mm"
+								required="true" requiredMessage="Digite a hora do exame" showOn="button"
+								style="width: 100%" />
+
+							<p:outputLabel value="Observação:" for="observacao" />
+							<p:inputTextarea id="observacao"
+								value="#{agendamentoBean.agendamento.observacao}" rows="5"
+								cols="30" counter="display" maxlength="500"
+								counterTemplate="{0} caracteres restantes." autoResize="false"
+								style="width: 87%" />
+							<br />
+							<h:outputText id="display" />
+						</h:panelGrid>
+
+						<div align="center">
+							<h:panelGrid columns="2">
+								<p:commandButton value="Salvar" icon="fa fa-fw fa-save"
+									action="#{agendamentoBean.salvar}" style="margin-right:20px;"
+									process="formAgendamento" ajax="false"
+									update=" :formTabelaExamesAgendados:tabelaExamesAgendados"
+									rendered="#{agendamentoBean.exibirBotaoSalvar(agendamento)}" />
+
+								<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
+									action="#{agendamentoBean.limpar}" immediate="true"
+									ajax="false" style="margin-right:20px;">
+									<p:resetInput target="panelGridCadastro" />
+								</p:commandButton>
+							</h:panelGrid>
+						</div>
+					</p:panelGrid>
+				</p:fieldset>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

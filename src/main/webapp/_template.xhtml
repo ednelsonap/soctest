@@ -18,7 +18,7 @@
 
 </h:head>
 
-<h:body>
+<h:body style="font-size: 15px; background-color: #d9e7e5;">
 	<script>
 		PrimeFaces.locales['pt'] = {
 			closeText : 'Fechar',
@@ -51,32 +51,32 @@
 			allDayText : 'Todo o Dia'
 		};
 	</script>
-	<p:growl id="messages" autoUpdate="true" life="3000" />
-	<div id="cabecalho"
-		style="background-color: CadetBlue; height: 80px; overflow: hidden; position: relative;">
-
+	
+	<p:growl id="messages" autoUpdate="true" life="5000" />
+	
+	<div id="cabecalho" style="background-color: CadetBlue; height: 75px; overflow: hidden; position: relative;">
 		<div align="center">
-
 			<h:graphicImage library="img" name="logo_soc.png"
 				style="margin-top:5px; margin-botton:5px;" />
-
 			<h:outputText />
 		</div>
 	</div>
 
-	<div id="conteudo" align="center"
-		style="font-size: 15px; background-color: #d9e7e5;">
+	<div id="conteudo" align="center">
 
 		<h:form id="tabMenu">
 			<p:tabMenu activeIndex="#{param.i}" style="width: 70%">
-				<p:menuitem value="Cadastro" outcome="cadastro">
+				<p:menuitem value="Agendamento" outcome="agendamento" icon="fa fa-pencil-square-o">
 					<f:param name="i" value="0" />
 				</p:menuitem>
-				<p:menuitem value="Agendamentos" outcome="agendamentos">
+				<p:menuitem value="Lista de Agendados" outcome="agendados" icon="fa fa-check-square-o">
 					<f:param name="i" value="1" />
 				</p:menuitem>
-				<p:menuitem value="Paciente">
+				<p:menuitem value="Paciente" outcome="paciente" icon="fa fa-user">
 					<f:param name="i" value="2" />
+				</p:menuitem>
+				<p:menuitem value="Exame" outcome="exame" icon="fa fa-flask">
+					<f:param name="i" value="3" />
 				</p:menuitem>
 			</p:tabMenu>
 		</h:form>

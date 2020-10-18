@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -16,7 +17,11 @@ import javax.transaction.Transactional;
 import org.primefaces.PrimeFaces;
 
 import br.com.soc.agendamento.dao.AgendamentoDao;
+import br.com.soc.agendamento.dao.ExameDao;
+import br.com.soc.agendamento.dao.PacienteDao;
 import br.com.soc.agendamento.model.Agendamento;
+import br.com.soc.agendamento.model.Exame;
+import br.com.soc.agendamento.model.Paciente;
 
 @Named
 @ViewScoped
@@ -25,52 +30,60 @@ public class AgendamentoBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Agendamento agendamento = new Agendamento();
-	
+
+	@Inject
+	private PacienteDao pacienteDao;
+
+	@Inject
+	private ExameDao exameDao;
+
 	@Inject
 	private AgendamentoDao agendamentoDao;
 
 	@Inject
 	private FacesContext context;
 
+	private List<Agendamento> agendamentos;
+
+	@PostConstruct
+	public void init() {
+		this.agendamentos = agendamentoDao.listaTodos();
+	}
+
+	public List<Paciente> getPacientes() {
+		return pacienteDao.listaTodos();
+	}
+
+	public List<Exame> getExames() {
+		return exameDao.listaTodos();
+	}
+
 	public List<Agendamento> getAgendamentos() {
-		return this.agendamentoDao.listaTodos();
+		return this.agendamentos;
 	}
 
 	@Transactional
 	public void salvar() {
-		System.out.println("Gravando agendamento " + this.agendamento.getNomeExame());
-		
-		boolean nomeExiste = agendamentoDao.nomePacienteExiste(this.agendamento);
+		agendamentoDao.adiciona(this.agendamento);
+		context.addMessage(null, new FacesMessage("Agendamento cadastrado com sucesso!"));
 
-		if (nomeExiste && this.agendamento.getId() == null) {
-			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
-					"Paciente " + this.agendamento.getNomePaciente() + " já está agendado!", null));
-		} else {
-			agendamentoDao.adiciona(this.agendamento);
-			context.addMessage(null,
-					new FacesMessage("Agendamento do exame " + this.agendamento.getNomeExame() + " salvo!"));
-		}
 		this.agendamento = new Agendamento();
 	}
 
 	@Transactional
 	public void alterar() {
-		System.out.println("Alterando agendamento " + this.agendamento.getNomeExame());
 
 		try {
 			agendamentoDao.atualiza(this.agendamento);
-			context.addMessage(null,
-					new FacesMessage("Agendamento " + agendamento.getNomeExame() + " alterado!"));
+			context.addMessage(null, new FacesMessage("Agendamento alterado com sucesso!"));
 
 		} catch (PersistenceException e) {
-			context.addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_WARN,
-							"Não foi possível salvar este agendamento! Verifique se não há duplicidade de nome.",
-							null));
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+					"Não foi possível salvar este agendamento! Verifique se não há duplicidade de nome.", null));
 		}
 		this.agendamento = new Agendamento();
 	}
-	
+
 	public boolean exibirBotaoAlterar(Agendamento agendamento) {
 		if (this.agendamento.getId() != null) {
 			return true;
@@ -86,24 +99,34 @@ public class AgendamentoBean implements Serializable {
 			return false;
 		}
 	}
-	
-	public Date getDataMinima(){
+
+	public Date getDataMinima() {
 		Calendar dataAtual = Calendar.getInstance();
 		dataAtual.add(Calendar.DATE, +1);
 		return dataAtual.getTime();
 	}
-	
+
 	@Transactional
 	public void remover(Agendamento agendamento) {
-		System.out.println("Removendo agendamento do exame " + agendamento.getNomeExame());
 
 		try {
 			agendamentoDao.remove(agendamento);
-			context.addMessage(null,
-					new FacesMessage("Agendamento do exame " + agendamento.getNomeExame() + " removido!"));
+			context.addMessage(null, new FacesMessage("Agendamento removido com sucesso!"));
 		} catch (PersistenceException e) {
 			context.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_WARN, "Não foi possível remover este agendamento!", null));
+		}
+	}
+
+	@Transactional
+	public void salvarResultado() {
+		try {
+			this.agendamento.setStatus("REALIZADO");
+			agendamentoDao.atualiza(this.agendamento);
+			context.addMessage(null, new FacesMessage("Resultado salvo com sucesso!"));
+		} catch (PersistenceException e) {
+			context.addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Não foi possível salvar!", null));
 		}
 	}
 
