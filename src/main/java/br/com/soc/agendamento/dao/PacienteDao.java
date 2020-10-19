@@ -42,6 +42,23 @@ public class PacienteDao implements Serializable{
 		return true;
 	}
 
+	public boolean cpfPacienteExiste(Paciente paciente){
+		EntityManager em = new JPAUtil().getEntityManager();
+		TypedQuery<Paciente> query = em.createQuery(
+				  " select p from Paciente p "
+				+ " where p.cpf = :pCpf", Paciente.class);
+		
+		query.setParameter("pCpf", paciente.getCpf());
+		
+		try {
+			Paciente resultado =  query.getSingleResult();
+		} catch (NoResultException ex) {
+			return false;
+		}
+		
+		return true;
+	}
+	
 	public void adiciona(Paciente t) {
 		dao.adiciona(t);
 	}

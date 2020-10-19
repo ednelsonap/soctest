@@ -47,10 +47,15 @@ public class PacienteBean implements Serializable {
 		System.out.println("Gravando paciente " + this.paciente.getNome());
 		
 		boolean nomeExiste = pacienteDao.nomePacienteExiste(this.paciente);
+		boolean cpfExiste = pacienteDao.cpfPacienteExiste(this.paciente);
 
 		if (nomeExiste && this.paciente.getId() == null) {
 			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
-					"Paciente " + this.paciente.getNome() + " já está agendado!", null));
+					"Nome " + this.paciente.getNome() + " já cadastrado!", null));
+			
+		} else if(cpfExiste && this.paciente.getId() == null){
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+					"CPF " + this.paciente.getCpf() + " já cadastrado!", null));
 		} else {
 			pacienteDao.adiciona(this.paciente);
 			context.addMessage(null,

@@ -21,7 +21,7 @@ public class Paciente implements Serializable{
 	private Date dataNasc;
 	@Column(length=1)
 	private String sexo; 
-	@Column(length=11)
+	@Column(unique=true,length=11)
 	private String cpf;
 	
 	public Integer getId() {

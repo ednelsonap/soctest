@@ -8,14 +8,14 @@
 
 <ui:composition template="_template.xhtml">
 	<ui:define name="titulo">
-		<title>Plantão</title>
+		<title>Agendados</title>
 	</ui:define>
 
 	<ui:define name="conteudo">
 
 		<!-- TABELA DE EXAMES AGENDADOS -->
 
-		<div style="width: 70%;">
+		<div style="width: 100%;">
 			<h:form id="formTabelaExamesAgendados">
 
 				<p:dataTable id="tabelaExamesAgendados" var="agendamento"
@@ -31,7 +31,7 @@
 					</f:facet>
 
 					<p:column headerText="Paciente"
-						sortBy="#{agendamento.paciente.nome}">
+						sortBy="#{agendamento.paciente.nome}" filterBy="#{agendamento.paciente.nome}">
 						<h:outputText value="#{agendamento.paciente.nome}" />
 					</p:column>
 
@@ -45,17 +45,11 @@
 						</h:outputText>
 					</p:column>
 
-					<p:column headerText="Hora" style="width: 100px;">
-						<h:outputText value="#{agendamento.dataExame}">
-							<f:convertDateTime pattern="HH:mm" />
-						</h:outputText>
-					</p:column>
-
 					<p:column headerText="Observação">
 						<h:outputText value="#{agendamento.observacao}" />
 					</p:column>
 
-					<p:column headerText="Status" style="width: 100px;">
+					<p:column headerText="Status" style="width: 100px;" sortBy="#{agendamento.status}" filterBy="#{agendamento.status}" >
 						<h:outputText value="#{agendamento.status}" />
 					</p:column>
 
@@ -206,13 +200,6 @@
 										mindate="#{agendamentoBean.dataMinima}"
 										validatorMessage="A data deve ser maior que a atual"
 										readonlyInput="true" />
-
-									<p:outputLabel for="hora" value="Hora:" />
-									<p:calendar id="hora"
-										value="#{agendamentoBean.agendamento.hora}" mask="true"
-										locale="pt" timeOnly="true" pattern="HH:mm" required="true"
-										requiredMessage="Digite a hora do exame" showOn="button"
-										style="width: 100%" />
 
 									<p:outputLabel value="Observação:" for="observacao" />
 									<p:inputTextarea id="observacao"

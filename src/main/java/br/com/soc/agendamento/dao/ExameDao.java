@@ -60,7 +60,5 @@ public class ExameDao implements Serializable{
 
 	public Exame buscaPorId(Integer id) {
 		return dao.buscaPorId(id);
-	}
-	
-	
+	}	
 }

@@ -4,6 +4,17 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	version="3.1">
 	<display-name>soctest</display-name>
+
+	<servlet>
+		<servlet-name>Jersey Web Application</servlet-name>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>jersey.config.server.provider.packages</param-name>
+			<param-value>br.com.soc.agendamento.resource</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -12,7 +23,12 @@
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.xhtml</url-pattern>
+		
+		<!-- <servlet-name>Jersey Web Application</servlet-name>
+		<url-pattern>/webapi/*</url-pattern> -->
 	</servlet-mapping>
+
+	
 
 	<context-param>
 		<param-name>primefaces.FONT_AWESOME</param-name>
@@ -23,5 +39,5 @@
 		<param-name>primefaces.THEME</param-name>
 		<param-value>#{temaBean.tema}</param-value>
 	</context-param>
-	
+
 </web-app>

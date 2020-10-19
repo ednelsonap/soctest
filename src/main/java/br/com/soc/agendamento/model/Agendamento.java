@@ -12,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.thoughtworks.xstream.XStream;
+
 @Entity
 public class Agendamento implements Serializable{
 
@@ -20,7 +22,6 @@ public class Agendamento implements Serializable{
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private Date dataExame;
-	private Date hora;
 	private String observacao;
 	private String status = "AGENDADO";
 	@Column(length=3000)
@@ -32,12 +33,6 @@ public class Agendamento implements Serializable{
 	@ManyToOne(cascade=CascadeType.MERGE, fetch=FetchType.EAGER)
 	private Exame exame;
 	
-	public Date getHora() {
-		return hora;
-	}
-	public void setHora(Date hora) {
-		this.hora = hora;
-	}
 	public Date getDataExame() {
 		return dataExame;
 	}
@@ -77,5 +72,7 @@ public class Agendamento implements Serializable{
 	public void setResultado(String resultado) {
 		this.resultado = resultado;
 	}
-	
+	public String toXML() {
+	    return new XStream().toXML(this);
+	}
 }

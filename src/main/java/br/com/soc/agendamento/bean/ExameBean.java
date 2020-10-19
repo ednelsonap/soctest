@@ -38,7 +38,7 @@ public class ExameBean implements Serializable {
 		this.exames = exameDao.listaTodos();
 	}
 	
-	public List<Exame> getExames() {
+	public List<Exame> getExames(){
 		return exames;
 	}
 

@@ -43,6 +43,10 @@ public class AgendamentoDao implements Serializable{
 	public int contaTodos() {
 		return dao.contaTodos();
 	}
+
+	public Agendamento buscaPorId(Integer id) {
+		return dao.buscaPorId(id);
+	}
 	
 	
 }

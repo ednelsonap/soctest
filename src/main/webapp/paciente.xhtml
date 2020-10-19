@@ -30,7 +30,7 @@
 								style="width: 100%">
 								<f:validateLength maximum="60" />
 							</p:inputText>
-
+							
 							<p:outputLabel value="CPF:" for="cpf" />
 							<p:inputText id="cpf" value="#{pacienteBean.paciente.cpf}"
 								required="true" requiredMessage="Digite o CPF do paciente"
@@ -47,7 +47,8 @@
 
 							<p:outputLabel value="Sexo:" for="sexo" />
 							<h:panelGrid columns="2">
-								<p:selectOneRadio id="sexo" required="true" requiredMessage="Escolha o sexo"
+								<p:selectOneRadio id="sexo" required="true"
+									requiredMessage="Escolha o sexo"
 									value="#{pacienteBean.paciente.sexo}" unselectable="true">
 									<f:selectItem itemLabel="M" itemValue="M" />
 									<f:selectItem itemLabel="F" itemValue="F" />
@@ -69,8 +70,8 @@
 									rendered="#{pacienteBean.exibirBotaoAlterar(paciente)}" />
 
 								<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
-									action="#{pacienteBean.limpar}" immediate="true"
-									ajax="false" style="margin-right:20px;">
+									action="#{pacienteBean.limpar}" immediate="true" ajax="false"
+									style="margin-right:20px;">
 									<p:resetInput target="panelGridCadastro" />
 								</p:commandButton>
 							</h:panelGrid>
@@ -79,10 +80,10 @@
 				</p:fieldset>
 			</h:form>
 		</div>
-			<!-- 	TABELA DE PACIENTES CADASTRADOS -->
-		<div style="width: 70%;">	
+		<!-- 	TABELA DE PACIENTES CADASTRADOS -->
+		<div style="width: 100%;">
 			<h:form id="formTabelaPacientesCadastrados">
-			
+
 				<p:dataTable id="tabelaPacientesCadastrados" var="paciente"
 					value="#{pacienteBean.pacientes}"
 					emptyMessage="Nenhum paciente cadastrado" paginator="true"
@@ -100,12 +101,13 @@
 						<h:outputText value="#{paciente.id}" />
 					</p:column>
 
-					<p:column headerText="Paciente" sortBy="#{paciente.nome}" filterBy="#{paciente.nome}" filterMatchMode="contains">
+					<p:column headerText="Paciente" sortBy="#{paciente.nome}"
+						filterBy="#{paciente.nome}" filterMatchMode="contains">
 						<h:outputText value="#{paciente.nome}" />
 					</p:column>
 
 					<p:column headerText="Data de Nascimento">
-						<h:outputText value="#{paciente.dataNasc}" >
+						<h:outputText value="#{paciente.dataNasc}">
 							<f:convertDateTime pattern="dd/MM/yyyy" />
 						</h:outputText>
 					</p:column>
@@ -126,9 +128,8 @@
 								actionListener="#{pacienteBean.remover(paciente)}"
 								icon="fa fa-fw fa-remove" />
 
-							<p:commandButton update=":formPaciente"
-								icon="fa fa-fw fa-edit" title="Alterar" ajax="false"
-								render=":formPaciente:botaoAlterar">
+							<p:commandButton update=":formPaciente" icon="fa fa-fw fa-edit"
+								title="Alterar" ajax="false" render=":formPaciente:botaoAlterar">
 								<f:setPropertyActionListener value="#{paciente}"
 									target="#{pacienteBean.paciente}" />
 							</p:commandButton>
@@ -137,9 +138,9 @@
 					</p:column>
 
 				</p:dataTable>
-			
-		</h:form>
-			
+
+			</h:form>
+
 		</div>
 	</ui:define>
 </ui:composition>

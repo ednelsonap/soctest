@@ -16,14 +16,14 @@
 
 		<!-- FORMULÁRIO DE CADASTRO DE EXAMES -->
 
-		<div style="width: 35%;">
+		<div style="width: 50%;">
 
 			<h:form id="formExame">
 				<p:fieldset legend="Cadastro de Exames">
 					<p:panelGrid id="panelGridCadastro">
 						<h:panelGrid columns="2" style="width: 100%; margin-bottom:10px"
 							cellpadding="5">
-							
+
 							<p:outputLabel value="Nome:" for="nome" />
 							<p:inputText id="nome" value="#{exameBean.exame.nome}"
 								required="true" requiredMessage="Digite o nome do exame"
@@ -31,14 +31,14 @@
 								style="width: 100%">
 								<f:validateLength maximum="60" />
 							</p:inputText>
-							
+
 						</h:panelGrid>
 						<div align="center">
 							<h:panelGrid columns="2">
 								<p:commandButton value="Salvar" icon="fa fa-fw fa-save"
 									action="#{exameBean.salvar}" style="margin-right:20px;"
 									process="formPaciente" ajax="false"
-									update=" :formTabelaExamesCadastrados:tabelaExamesCadastrados"
+									update=":formTabelaExamesCadastrados:tabelaExamesCadastrados"
 									rendered="#{exameBean.exibirBotaoSalvar(exame)}" />
 
 								<p:commandButton value="Alterar" id="botaoAlterar"
@@ -48,8 +48,8 @@
 									rendered="#{exameBean.exibirBotaoAlterar(exame)}" />
 
 								<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
-									action="#{exameBean.limpar}" immediate="true"
-									ajax="false" style="margin-right:20px;">
+									action="#{exameBean.limpar}" immediate="true" ajax="false"
+									style="margin-right:20px;">
 									<p:resetInput target="panelGridCadastro" />
 								</p:commandButton>
 							</h:panelGrid>
@@ -57,31 +57,32 @@
 					</p:panelGrid>
 				</p:fieldset>
 			</h:form>
-		</div>	
-		
-			<!-- 	TABELA DE EXAMES CADASTRADOS -->
-			
-		<div style="width: 70%;">	
+		</div>
+
+		<!-- 	TABELA DE EXAMES CADASTRADOS -->
+
+		<div style="width: 50%;">
+
 			<h:form id="formTabelaExamesCadastrados">
-			
+
 				<p:dataTable id="tabelaExamesCadastrados" var="exame"
-					value="#{exameBean.exames}"
-					emptyMessage="Nenhum exame cadastrado" paginator="true"
+					value="#{exameBean.exames}" emptyMessage="Nenhum exame cadastrado"
+					style="margin-bottom:20px; text-align:center; margin-top:20px" paginator="true"
 					rows="10"
 					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 					currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
-					rowsPerPageTemplate="10,20,50,100"
-					style="margin-bottom:20px; text-align:center; margin-top:20px">
+					rowsPerPageTemplate="10,20,50,100">
 
 					<f:facet name="header">
 					EXAMES CADASTRADOS
-				</f:facet>
+					</f:facet>
 
-					<p:column headerText="Código" sortBy="#{exame.id}" >
+					<p:column headerText="Código" sortBy="#{exame.id}" style="width:80px;">
 						<h:outputText value="#{exame.id}" />
 					</p:column>
-					
-					<p:column headerText="Exame"  sortBy="#{exame.nome}" filterBy="#{exame.nome}" filterMacthMode="contains">
+
+					<p:column headerText="Exame" sortBy="#{exame.nome}"
+						filterBy="#{exame.nome}" filterMacthMode="contains">
 						<h:outputText value="#{exame.nome}" />
 					</p:column>
 
@@ -93,9 +94,8 @@
 								actionListener="#{exameBean.remover(exame)}"
 								icon="fa fa-fw fa-remove" />
 
-							<p:commandButton update=":formPaciente"
-								icon="fa fa-fw fa-edit" title="Alterar" ajax="false"
-								render=":formPaciente:botaoAlterar">
+							<p:commandButton update=":formPaciente" icon="fa fa-fw fa-edit"
+								title="Alterar" ajax="false" render=":formPaciente:botaoAlterar">
 								<f:setPropertyActionListener value="#{exame}"
 									target="#{exameBean.exame}" />
 							</p:commandButton>
@@ -104,9 +104,9 @@
 					</p:column>
 
 				</p:dataTable>
-			
-		</h:form>
-			
+
+			</h:form>
+
 		</div>
 	</ui:define>
 </ui:composition>
