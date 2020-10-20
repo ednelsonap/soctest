@@ -10,7 +10,7 @@ import javax.ws.rs.core.MediaType;
 import br.com.soc.agendamento.dao.AgendamentoDao;
 import br.com.soc.agendamento.model.Agendamento;
 
-@Path("/exames")
+@Path("exames")
 public class AgendamentoResource {
 
 	@Inject

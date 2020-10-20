@@ -23,9 +23,10 @@
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.xhtml</url-pattern>
-		
-		<!-- <servlet-name>Jersey Web Application</servlet-name>
-		<url-pattern>/webapi/*</url-pattern> -->
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Jersey Web Application</servlet-name>
+		<url-pattern>/webservice/*</url-pattern>
 	</servlet-mapping>
 
 	
