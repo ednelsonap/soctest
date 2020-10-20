@@ -59,8 +59,8 @@
 							<h:panelGrid columns="2">
 								<p:commandButton value="Salvar" icon="fa fa-fw fa-save"
 									action="#{pacienteBean.salvar}" style="margin-right:20px;"
-									process="formPaciente" ajax="false"
-									update=" :formTabelaPacientesCadastrados:tabelaPacientesCadastrados"
+									process="@form" ajax="false"
+									update=":formTabelaPacientesCadastrados:tabelaPacientesCadastrados"
 									rendered="#{pacienteBean.exibirBotaoSalvar(paciente)}" />
 
 								<p:commandButton value="Alterar" id="botaoAlterar"

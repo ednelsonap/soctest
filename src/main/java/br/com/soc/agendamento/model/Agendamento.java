@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.google.gson.Gson;
 import com.thoughtworks.xstream.XStream;
 
 @Entity
@@ -74,5 +75,8 @@ public class Agendamento implements Serializable{
 	}
 	public String toXML() {
 	    return new XStream().toXML(this);
+	}
+	public String toJson() {
+	    return new Gson().toJson(this);
 	}
 }

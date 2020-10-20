@@ -24,20 +24,19 @@ public class PacienteBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Paciente paciente = new Paciente();
-	
+
 	@Inject
 	private PacienteDao pacienteDao;
-
 	@Inject
 	private FacesContext context;
-
-	private List<Paciente> pacientes;
 	
+	private List<Paciente> pacientes;
+
 	@PostConstruct
 	public void init() {
 		this.pacientes = pacienteDao.listaTodos();
 	}
-	
+
 	public List<Paciente> getPacientes() {
 		return pacientes;
 	}
@@ -45,23 +44,23 @@ public class PacienteBean implements Serializable {
 	@Transactional
 	public void salvar() {
 		System.out.println("Gravando paciente " + this.paciente.getNome());
-		
+
 		boolean nomeExiste = pacienteDao.nomePacienteExiste(this.paciente);
 		boolean cpfExiste = pacienteDao.cpfPacienteExiste(this.paciente);
 
 		if (nomeExiste && this.paciente.getId() == null) {
 			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
 					"Nome " + this.paciente.getNome() + " já cadastrado!", null));
-			
-		} else if(cpfExiste && this.paciente.getId() == null){
+
+		} else if (cpfExiste && this.paciente.getId() == null) {
 			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
 					"CPF " + this.paciente.getCpf() + " já cadastrado!", null));
 		} else {
 			pacienteDao.adiciona(this.paciente);
-			context.addMessage(null,
-					new FacesMessage("Paciente do exame " + this.paciente.getNome() + " salvo!"));
+			context.addMessage(null, new FacesMessage("Paciente " + this.paciente.getNome() + " salvo!"));
 		}
 		this.paciente = new Paciente();
+		this.pacientes = pacienteDao.listaTodos();
 	}
 
 	@Transactional
@@ -70,16 +69,28 @@ public class PacienteBean implements Serializable {
 
 		try {
 			pacienteDao.atualiza(this.paciente);
-			context.addMessage(null,
-					new FacesMessage("Paciente " + paciente.getNome() + " alterado!"));
+			context.addMessage(null, new FacesMessage("Paciente " + paciente.getNome() + " alterado!"));
 
 		} catch (PersistenceException e) {
-			context.addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_WARN,
-							"Não foi possível salvar este paciente! Verifique se não há duplicidade de nome.",
-							null));
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+					"Não foi possível salvar este paciente! Verifique se não há duplicidade de nome.", null));
 		}
 		this.paciente = new Paciente();
+		this.pacientes = pacienteDao.listaTodos();
+	}
+
+	@Transactional
+	public void remover(Paciente paciente) {
+		System.out.println("Removendo paciente " + paciente.getNome());
+
+		try {
+			pacienteDao.remove(paciente);
+			context.addMessage(null, new FacesMessage("Paciente " + paciente.getNome() + " removido!"));
+		} catch (PersistenceException e) {
+			context.addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_WARN, "Não foi possível remover este paciente!", null));
+		}
+		this.pacientes = pacienteDao.listaTodos();
 	}
 	
 	public boolean exibirBotaoAlterar(Paciente paciente) {
@@ -95,20 +106,6 @@ public class PacienteBean implements Serializable {
 			return true;
 		} else {
 			return false;
-		}
-	}
-	
-	@Transactional
-	public void remover(Paciente paciente) {
-		System.out.println("Removendo paciente " + paciente.getNome());
-
-		try {
-			pacienteDao.remove(paciente);
-			context.addMessage(null,
-					new FacesMessage("Paciente " + paciente.getNome() + " removido!"));
-		} catch (PersistenceException e) {
-			context.addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_WARN, "Não foi possível remover este paciente!", null));
 		}
 	}
 

@@ -18,9 +18,9 @@ public class AgendamentoResource {
 	
 	@Path("{id}")
     @GET
-    @Produces(MediaType.APPLICATION_XML)
+    @Produces(MediaType.APPLICATION_JSON)
     public String busca(@PathParam("id") Integer id) {
         Agendamento agendamento = agendamentoDao.buscaPorId(id);
-        return agendamento.toXML();
+        return agendamento.toJson();
     }
 }

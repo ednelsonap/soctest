@@ -64,10 +64,16 @@ public class AgendamentoBean implements Serializable {
 
 	@Transactional
 	public void salvar() {
-		agendamentoDao.adiciona(this.agendamento);
-		context.addMessage(null, new FacesMessage("Agendamento cadastrado com sucesso!"));
+		try {
+			agendamentoDao.adiciona(this.agendamento);
+			context.addMessage(null, new FacesMessage("Agendamento cadastrado com sucesso!"));
 
+		} catch (PersistenceException e) {
+			context.addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_WARN, "Não foi possível salvar este agendamento!", null));
+		}
 		this.agendamento = new Agendamento();
+		this.agendamentos = agendamentoDao.listaTodos();
 	}
 
 	@Transactional
@@ -84,6 +90,30 @@ public class AgendamentoBean implements Serializable {
 		this.agendamento = new Agendamento();
 	}
 
+	@Transactional
+	public void remover(Agendamento agendamento) {
+
+		try {
+			agendamentoDao.remove(agendamento);
+			context.addMessage(null, new FacesMessage("Agendamento removido com sucesso!"));
+		} catch (PersistenceException e) {
+			context.addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_WARN, "Não foi possível remover este agendamento!", null));
+		}
+		this.agendamentos = agendamentoDao.listaTodos();
+	}
+	
+	@Transactional
+	public void salvarResultado() {
+		try {
+			this.agendamento.setStatus("REALIZADO");
+			agendamentoDao.atualiza(this.agendamento);
+			context.addMessage(null, new FacesMessage("Resultado salvo com sucesso!"));
+		} catch (PersistenceException e) {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Não foi possível salvar!", null));
+		}
+	}
+	
 	public boolean exibirBotaoAlterar(Agendamento agendamento) {
 		if (this.agendamento.getId() != null) {
 			return true;
@@ -104,30 +134,6 @@ public class AgendamentoBean implements Serializable {
 		Calendar dataAtual = Calendar.getInstance();
 		dataAtual.add(Calendar.DATE, +1);
 		return dataAtual.getTime();
-	}
-
-	@Transactional
-	public void remover(Agendamento agendamento) {
-
-		try {
-			agendamentoDao.remove(agendamento);
-			context.addMessage(null, new FacesMessage("Agendamento removido com sucesso!"));
-		} catch (PersistenceException e) {
-			context.addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_WARN, "Não foi possível remover este agendamento!", null));
-		}
-	}
-
-	@Transactional
-	public void salvarResultado() {
-		try {
-			this.agendamento.setStatus("REALIZADO");
-			agendamentoDao.atualiza(this.agendamento);
-			context.addMessage(null, new FacesMessage("Resultado salvo com sucesso!"));
-		} catch (PersistenceException e) {
-			context.addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Não foi possível salvar!", null));
-		}
 	}
 
 	public void limpar() {

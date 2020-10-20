@@ -57,6 +57,7 @@ public class ExameBean implements Serializable {
 					new FacesMessage("Exame " + this.exame.getNome() + " cadastrado com sucesso!"));
 		}
 		this.exame = new Exame();
+		this.exames = exameDao.listaTodos();
 	}
 
 	@Transactional
@@ -75,6 +76,22 @@ public class ExameBean implements Serializable {
 							null));
 		}
 		this.exame = new Exame();
+		this.exames = exameDao.listaTodos();
+	}
+	
+	@Transactional
+	public void remover(Exame exame) {
+		System.out.println("Removendo exame " + exame.getNome());
+
+		try {
+			exameDao.remove(exame);
+			context.addMessage(null,
+					new FacesMessage("Exame " + exame.getNome() + " removido!"));
+		} catch (PersistenceException e) {
+			context.addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_WARN, "Não foi possível remover este exame!", null));
+		}
+		this.exames = exameDao.listaTodos();
 	}
 	
 	public boolean exibirBotaoAlterar(Exame exame) {
@@ -93,20 +110,6 @@ public class ExameBean implements Serializable {
 		}
 	}
 	
-	@Transactional
-	public void remover(Exame exame) {
-		System.out.println("Removendo exame " + exame.getNome());
-
-		try {
-			exameDao.remove(exame);
-			context.addMessage(null,
-					new FacesMessage("Exame " + exame.getNome() + " removido!"));
-		} catch (PersistenceException e) {
-			context.addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_WARN, "Não foi possível remover este exame!", null));
-		}
-	}
-
 	public void limpar() {
 		this.exame = new Exame();
 		PrimeFaces.current().resetInputs("formExame:panelGridCadastro");
