@@ -30,7 +30,7 @@
 								style="width: 100%">
 								<f:validateLength maximum="60" />
 							</p:inputText>
-							
+
 							<p:outputLabel value="CPF:" for="cpf" />
 							<p:inputText id="cpf" value="#{pacienteBean.paciente.cpf}"
 								required="true" requiredMessage="Digite o CPF do paciente"
@@ -80,6 +80,23 @@
 				</p:fieldset>
 			</h:form>
 		</div>
+
+		<!-- ESCOLHA DA ORDENAÇÃO -->
+		<div style="width: 35%;">
+			<h:form id="formOrdenacao">
+				<p:fieldset legend="Ordenar por:">
+					<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+
+						<p:commandButton value="Nome"
+							action="#{pacienteBean.ordenarPorNome}"
+							style="margin-right:20px;" process="@form" ajax="false"
+							update=":formTabelaPacientesCadastrados:tabelaPacientesCadastrados" />
+
+					</h:panelGrid>
+				</p:fieldset>
+			</h:form>
+		</div>
+
 		<!-- 	TABELA DE PACIENTES CADASTRADOS -->
 		<div style="width: 100%;">
 			<h:form id="formTabelaPacientesCadastrados">
